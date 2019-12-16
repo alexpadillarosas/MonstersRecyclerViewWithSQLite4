@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blueradix.android.monstersrecyclerviewwithsqlite.Entities.Monster;
+import com.blueradix.android.monstersrecyclerviewwithsqlite.entities.Monster;
 import com.blueradix.android.monstersrecyclerviewwithsqlite.R;
 
 import java.util.List;
@@ -49,11 +49,18 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
         Monster monster = monsters.get(position);
         // call the method to set the values in the MonsterViewHolder
         holder.updateMonster(monster);
+
+
     }
 
     //returns the total number of the list size. The list values are passed by the constructor
     @Override
     public int getItemCount() {
         return monsters.size();
+    }
+
+    public void addItem(Monster monster) {
+        monsters.add(monster);
+        notifyItemInserted(getItemCount());
     }
 }

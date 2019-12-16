@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-import com.blueradix.android.monstersrecyclerviewwithsqlite.Entities.Monster;
+import com.blueradix.android.monstersrecyclerviewwithsqlite.entities.Monster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,9 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DROP_TABLE_ST = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String GET_ALL_ST = "SELECT * FROM " + TABLE_NAME;
-
+    //adding more queries
+    private static final String GET_LAST_INSERTED_ID = "SELECT SEQ FROM SQLITE_SEQUENCE WHERE NAME = ?";
+    private static final String GET_MONSTER_BY_ID = "SELECT " + COL_ID + ", " + COL_NAME + ", " + COL_DESCRIPTION + ", " + COL_SCARINESS + ", " + COL_IMAGE +  " FROM " + TABLE_NAME + " WHERE " + COL_ID + "= ?";
 
 
     /**
@@ -61,7 +63,7 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public boolean insert(String name, String description, Integer scariness) {
+    public Long insert(String name, String description, Integer scariness) {
         //create an instance of SQLITE database
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -77,8 +79,8 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_IMAGE, getRandomImageName());
 
         long result = db.insert(TABLE_NAME, null, contentValues);
-        //if result -1  insert was not performed, otherwise will have the row ID of the newly inserted row
-        return result != -1;
+
+        return result;
     }
 
     public Cursor getAll() {
@@ -138,4 +140,42 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    private Cursor getSequenceCursor(String tableName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery(GET_LAST_INSERTED_ID, new String[]{tableName});
+    }
+
+    public Long getLastInsertedIdInTable(String tableName){
+        Long lastId = -999L;
+        Cursor cursor = getSequenceCursor(tableName);
+
+        if(cursor.getCount()>0){
+            while (cursor.moveToNext()){
+                lastId = cursor.getLong(0);
+            }
+        }
+        cursor.close();
+        return lastId;
+    }
+
+    public Monster getMonster(Long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Monster monster = null;
+
+        Cursor cursor = db.rawQuery(GET_MONSTER_BY_ID, new String[]{id.toString()});
+
+        if(cursor.getCount() > 0)
+            while (cursor.moveToNext()){
+                String name = cursor.getString(1);
+                String description = cursor.getString(2);
+                Integer scariness = cursor.getInt(3);
+                String imageFileName = cursor.getString(4);
+
+                monster = new Monster(id, name, description, scariness, imageFileName);
+
+            }
+        cursor.close();
+        return monster;
+
+    }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Comprar un Monstruo</string>
+    <string name="action_settings">Configuracion</string>
+    <string name="title_activity_add_monster_scrolling">Nuevo Monstruo</string>
+    <string name="title_activity_monster_detail_scrolling">Ver Monstruo</string>
+</resources>

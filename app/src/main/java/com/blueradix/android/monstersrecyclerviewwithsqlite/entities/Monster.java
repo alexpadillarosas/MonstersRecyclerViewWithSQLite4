@@ -1,15 +1,20 @@
-package com.blueradix.android.monstersrecyclerviewwithsqlite.Entities;
+package com.blueradix.android.monstersrecyclerviewwithsqlite.entities;
 
 import java.io.Serializable;
 
 public class Monster implements Serializable {
 
+    public static final String MONSTER_KEY = "monster_key";
 
-    public Long id;
-    public String name;
-    public String description;
-    public Integer scariness;
-    public String imageFileName;
+    private Long id;
+    private String name;
+    private String description;
+    private Integer scariness;
+    private String imageFileName;
+
+    public Monster() {
+
+    }
 
     public Monster(Long id, String name, String description, Integer scariness, String imageFileName) {
         this.id = id;
