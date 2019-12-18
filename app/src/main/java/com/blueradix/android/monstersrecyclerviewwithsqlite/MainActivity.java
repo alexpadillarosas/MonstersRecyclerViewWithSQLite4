@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        //we set back the original AppTheme, to stop showing the splash as background image of this activity
         setTheme(R.style.AppTheme);
 
         super.onCreate(savedInstanceState);
@@ -47,11 +47,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-
-                 */
                 //Add a new Monster
                 addNewMonster();
             }
@@ -59,9 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView monstersRecyclerView = findViewById(R.id.monstersRecyclerView);
 
-
         //set the layout manager
-//        monstersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //monstersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -69,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
         monstersRecyclerView.setLayoutManager(gridLayoutManager);
 
-//        monstersRecyclerView.setLayoutManager(linearLayoutManager);
+        //monstersRecyclerView.setLayoutManager(linearLayoutManager);
 
 
         //Load Data from the database
@@ -112,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                     //try Always to use the adapter to modify the elements of your RecyclerView
                     adapter.addItem(monster);
                 }else{
-                    Snackbar.make(this.getCurrentFocus(), "We couldn't create your monster, try again", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(this.getCurrentFocus(), getString(R.string.create_monster_failed_message), Snackbar.LENGTH_SHORT).show();
                 }
             }
         }
@@ -140,12 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    /*
-    add splash
-    add internationalization:
-        right click on strings.xml and select Open Translations Editor and work on the translations
-        To test it go to settings => Languages & input => Languages => Add a language and set it as 1st
-     */
+
 
 
 }

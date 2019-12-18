@@ -18,16 +18,26 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
     private List<Monster> monsters;
     private Context context;
 
+    /**
+     * Constructor receiving the datasource of the recyclerView monsters list, and the context of the caller.
+     * @param monsters      List of monsters to display in the recyclerView
+     * @param context
+     */
     public MonsterRecyclerViewAdapter(List<Monster> monsters, Context context) {
         this.monsters = monsters;
         this.context = context;
     }
 
-    //creates a view holder whenever the RecyclerView needs a new one, it creates a view holder
-    // from the recycler_item_view xml
-    //This is the moment when the row layout is inflated (grab the xml and turning it into GUI),
-    // passed to the ViewHolder object, and
-    //each child view can be found and stored.
+    /**
+     * Creates a view holder whenever the RecyclerView needs a new one, it creates a view holder(data in one element of the recyclerView).
+     * This is the moment when the row layout is inflated (grab the recycler_item_view.xml and turning it into GUI component).
+     * Creates a new view Holder(MonsterViewHolder in this case) by passing the recently inflated view (recycler_item_view.xml in this case)
+     *
+     * @param parent        The ViewGroup into which the new View will be added after it is bound to
+     *                      an adapter position.
+     * @param viewType
+     * @return      The MonsterViewHolder ready to hold data of one Monster
+     */
     @NonNull
     @Override
     public MonsterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,8 +51,12 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
         return monsterViewHolder;
     }
 
-
-    //Takes a ViewHolder object and sets the proper list data (from the list) on the view
+    /**
+     * Takes a ViewHolder object and sets the proper list data (from the list) on the view
+     * @param holder    an object of MonsterViewHolder class, representing each item (CardView content)
+     *                  in the recyclerView
+     * @param position  the position of the monster in the monsters list
+     */
     @Override
     public void onBindViewHolder(@NonNull MonsterViewHolder holder, int position) {
         //get the data from the list, based on position
@@ -53,14 +67,22 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
 
     }
 
-    //returns the total number of the list size. The list values are passed by the constructor
+    /**
+     *
+     * @return  returns the total number of the list size. The list values are passed by the constructor
+     */
     @Override
     public int getItemCount() {
         return monsters.size();
     }
 
+    /**
+     * Add a monster to the list of monsters shown by the Adapter ( monsters )
+     * @param monster   Monster to be added to the recyclerView
+     */
     public void addItem(Monster monster) {
         monsters.add(monster);
+        //notify the recyclerView a new element was added to its source ( monsters list )
         notifyItemInserted(getItemCount());
     }
 }

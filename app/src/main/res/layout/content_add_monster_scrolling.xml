@@ -41,7 +41,7 @@
                 android:id="@+id/monsterNameEditTextAddMonster"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Type your monster's name" />
+                android:hint="@string/type_your_monster_s_name_add_monster_scrolling_activity" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <EditText
@@ -51,7 +51,7 @@
             android:layout_marginTop="8dp"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="add a short description"
+            android:hint="@string/add_a_short_description_add_monster_scrolling_activity"
             android:inputType="textMultiLine"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -62,11 +62,11 @@
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:max="5"
             android:progress="0"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/monsterDescriptionEditTextAddMonster" />
 
@@ -75,31 +75,32 @@
             android:layout_width="169dp"
             android:layout_height="25dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="16dp"
-            android:text="scariness"
+            android:layout_marginTop="24dp"
+            android:text="@string/scariness_label_add_monster_scrolling_activity"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/monsterDescriptionEditTextAddMonster" />
-
-        <Button
-            android:id="@+id/cancelButtonAddMonster"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:text="Cancel"
-            app:layout_constraintEnd_toStartOf="@+id/addButtonAddMonster"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/scarinnessSeekBarAddMonster" />
 
         <Button
             android:id="@+id/addButtonAddMonster"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:text="Add"
+            android:text="@string/add_button_label_add_monster_scrolling_activity"
             app:layout_constraintBaseline_toBaselineOf="@+id/cancelButtonAddMonster"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/cancelButtonAddMonster" />
+
+        <Button
+            android:id="@+id/cancelButtonAddMonster"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/cancel_button_label_add_monster_activity"
+            app:layout_constraintEnd_toStartOf="@+id/addButtonAddMonster"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/scarinnessSeekBarAddMonster" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

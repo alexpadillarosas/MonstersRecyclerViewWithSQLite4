@@ -26,7 +26,7 @@ public class MonsterViewHolder extends RecyclerView.ViewHolder {
 
 //    private Monster currentMonster;
 
-    //bind the recycler_item_view.xml elements
+    //binding recycler_item_view.xml elements
 
     public final ImageView monsterImageView;
     public final TextView monsterName;
@@ -60,6 +60,10 @@ public class MonsterViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    /**
+     * Method used to update the data of the ViewHolder of a particular monster
+     * @param monster       The monster object containing the data to populate the correspondent MonsterViewHolder
+     */
     public void updateMonster(Monster monster){
 
         Picasso.get().load("file:///android_asset/monsters/" + monster.getImageFileName().substring(3) + ".png").into(monsterImageView);

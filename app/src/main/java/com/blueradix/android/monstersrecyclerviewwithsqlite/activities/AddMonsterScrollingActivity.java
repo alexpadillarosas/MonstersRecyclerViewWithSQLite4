@@ -29,7 +29,9 @@ public class AddMonsterScrollingActivity extends AppCompatActivity {
     Button cancelMonsterButton;
     Button addMonsterButton;
 
+
     Monster monster;
+    Integer scarinessValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,23 @@ public class AddMonsterScrollingActivity extends AppCompatActivity {
             }
         });
 
+        scarinessSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                scarinessValue = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
     }
 
     private void add(View v) {
@@ -77,14 +96,13 @@ public class AddMonsterScrollingActivity extends AppCompatActivity {
         String monsterDescription = monsterDescriptionEditText.getText().toString();
 
         if(monsterName.isEmpty()) {
-            Snackbar.make(v, "Name is required", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(v, getString(R.string.monster_name_is_required), Snackbar.LENGTH_SHORT).show();
             return;
         }
         monster = new Monster();
         monster.setName(monsterName);
         monster.setDescription(monsterDescription);
-        //change this to get the value from the SeekBar
-        monster.setScariness(3);
+        monster.setScariness(scarinessValue);
 
         //set the intent to return the monster to the caller Activity
         Intent goingBack = new Intent();
