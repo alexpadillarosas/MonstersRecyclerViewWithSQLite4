@@ -29,44 +29,36 @@
 
         <ImageView
             android:id="@+id/monsterImageViewDetailActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:scaleType="fitCenter"
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="@string/add_a_short_description_add_monster_scrolling_activity" />
 
         <TextView
             android:id="@+id/monsterNameTextViewDetailActivity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/monsterImageViewDetailActivity" />
 
-        <TextView
-            android:id="@+id/descriptionTextViewDetailActivity"
-            android:layout_width="385dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="8dp"
-            android:inputType="textMultiLine"
-            android:text="TextView"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/scarinessRatingBarDetailActivity" />
-
         <RatingBar
-            android:id="@+id/scarinessRatingBarDetailActivity"
+            android:id="@+id/monsterRatingBarDetailActivity"
             style="@style/Widget.AppCompat.RatingBar.Indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:isIndicator="false"
+            android:max="5"
             android:numStars="5"
+            android:rating="0"
             android:stepSize="1"
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toBottomOf="@+id/monsterNameTextViewDetailActivity" />
@@ -76,43 +68,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Scariness"
-            app:layout_constraintEnd_toStartOf="@+id/scarinessRatingBarDetailActivity"
+            android:text="@string/overall_rating"
+            app:layout_constraintEnd_toStartOf="@+id/monsterRatingBarDetailActivity"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline3"
             app:layout_constraintTop_toBottomOf="@+id/monsterNameTextViewDetailActivity" />
-
-        <EditText
-            android:id="@+id/quantityEditTextDetailActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="number"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/descriptionTextViewDetailActivity"
-            tools:text="1" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Quantity"
-            app:layout_constraintEnd_toStartOf="@+id/quantityEditTextDetailActivity"
-            app:layout_constraintHorizontal_bias="0.347"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/descriptionTextViewDetailActivity" />
-
-        <Button
-            android:id="@+id/orderButtonDetailActivity"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Add to cart"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
-            app:layout_constraintStart_toStartOf="@+id/guideline3"
-            app:layout_constraintTop_toBottomOf="@+id/quantityEditTextDetailActivity" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

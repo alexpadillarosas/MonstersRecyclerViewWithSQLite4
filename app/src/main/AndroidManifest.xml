@@ -12,7 +12,9 @@
         <activity
             android:name=".activities.MonsterDetailScrollingActivity"
             android:label="@string/title_activity_monster_detail_scrolling"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"
+            ></activity>
         <activity
             android:name=".activities.AddMonsterScrollingActivity"
             android:label="@string/title_activity_add_monster_scrolling"

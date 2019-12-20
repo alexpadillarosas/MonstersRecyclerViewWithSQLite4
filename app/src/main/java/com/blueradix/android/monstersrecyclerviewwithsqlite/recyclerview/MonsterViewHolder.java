@@ -1,18 +1,16 @@
 package com.blueradix.android.monstersrecyclerviewwithsqlite.recyclerview;
 
 
-import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blueradix.android.monstersrecyclerviewwithsqlite.activities.AddMonsterScrollingActivity;
 import com.blueradix.android.monstersrecyclerviewwithsqlite.entities.Monster;
 import com.blueradix.android.monstersrecyclerviewwithsqlite.R;
-import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 
@@ -31,32 +29,19 @@ public class MonsterViewHolder extends RecyclerView.ViewHolder {
     public final ImageView monsterImageView;
     public final TextView monsterName;
     public final TextView monsterDescription;
+    public final RatingBar ratingBar;
 
-    public MonsterViewHolder(@NonNull View itemView) {
+    OnMonsterListener onMonsterListener;
+
+    public MonsterViewHolder(@NonNull View itemView, OnMonsterListener onMonsterListener) {
         super(itemView);
 
         monsterImageView = itemView.findViewById(R.id.monsterImageViewAddMonster);
-        monsterName = itemView.findViewById(R.id.monsterName);
-        monsterDescription = itemView.findViewById(R.id.monsterDescription);
+        monsterName = itemView.findViewById(R.id.monsterNameRecyclerView);
+        monsterDescription = itemView.findViewById(R.id.monsterDescriptionRecyclerView);
+        ratingBar = itemView.findViewById(R.id.ratingBarMonsterRecyclerView);
 
-        //to do something when touching the cardview
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // here call the details activity
-                Snackbar.make(v, "this Monster is at position " + getAdapterPosition(), Snackbar.LENGTH_SHORT).show();
-//                callAddMonsterScrollingActivityToModify(v, getAdapterPosition(), currentMonster);
-
-            }
-        });
-
-    }
-
-    private void callAddMonsterScrollingActivityToModify(View v, int adapterPosition, Monster monster) {
-        Intent goToModifyMonster = new Intent( v.getContext(), AddMonsterScrollingActivity.class);
-
-
-//        goToModifyMonster.putExtra(cu)
+        this.onMonsterListener = onMonsterListener;
 
     }
 
@@ -64,7 +49,7 @@ public class MonsterViewHolder extends RecyclerView.ViewHolder {
      * Method used to update the data of the ViewHolder of a particular monster
      * @param monster       The monster object containing the data to populate the correspondent MonsterViewHolder
      */
-    public void updateMonster(Monster monster){
+    public void updateMonster(final Monster monster){
 
         Picasso.get().load("file:///android_asset/monsters/" + monster.getImageFileName().substring(3) + ".png").into(monsterImageView);
         this.monsterName.setText(monster.getName());
@@ -73,11 +58,27 @@ public class MonsterViewHolder extends RecyclerView.ViewHolder {
         //themselves rather than by putting them in a separate structure.
         this.monsterName.setTag(monster.getId());
         this.monsterDescription.setText(monster.getDescription());
+        float rate;
+        if(monster.getVotes() > 0)
+            rate = 1.0f * monster.getStars() / monster.getVotes();
+        else
+            rate = 0.0f;
+        this.ratingBar.setRating(rate);
     }
 
-//    public void bind(Monster monster, OnItemClickListener listener){
-//        this.
-//    }
 
+    /**
+     * Bind every monster with a listener, to be used when the user clicks a particular monster in the recyclerView
+     * @param monster               monster in the view
+     * @param onMonsterListener     listener to be called
+     */
+    public void bind(final Monster monster, final OnMonsterListener onMonsterListener) {
+        this.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMonsterListener.onMonsterClick(monster);
+            }
+        });
+    }
 
 }

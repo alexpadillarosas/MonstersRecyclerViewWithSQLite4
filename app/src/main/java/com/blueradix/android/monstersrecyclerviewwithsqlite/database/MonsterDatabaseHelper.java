@@ -2,14 +2,21 @@ package com.blueradix.android.monstersrecyclerviewwithsqlite.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.blueradix.android.monstersrecyclerviewwithsqlite.entities.Monster;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,9 +26,14 @@ import java.util.Random;
  */
 public class MonsterDatabaseHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = MonsterDatabaseHelper.class.getName();
+
+    private static MonsterDatabaseHelper mInstance = null;
+    private final Context context;
+
     //create database constants
     private static final String DATABASE_NAME = "monster.db";
-    private static final Integer DATABASE_VERSION = 1;
+    private static final Integer DATABASE_VERSION = 3;
     private static final String TABLE_NAME = "monster";
 
     //create constants for the table's column name
@@ -30,6 +42,8 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_DESCRIPTION = "DESCRIPTION";
     private static final String COL_SCARINESS = "SCARINESS";
     private static final String COL_IMAGE = "IMAGE";
+    private static final String COL_VOTES = "VOTES";
+    private static final String COL_STARS = "STARS";
 
     //create sql statements
     private static final String CREATE_TABLE_ST = "CREATE TABLE " + TABLE_NAME + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -42,8 +56,15 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
     private static final String GET_ALL_ST = "SELECT * FROM " + TABLE_NAME;
     //adding more queries
     private static final String GET_LAST_INSERTED_ID = "SELECT SEQ FROM SQLITE_SEQUENCE WHERE NAME = ?";
-    private static final String GET_MONSTER_BY_ID = "SELECT " + COL_ID + ", " + COL_NAME + ", " + COL_DESCRIPTION + ", " + COL_SCARINESS + ", " + COL_IMAGE +  " FROM " + TABLE_NAME + " WHERE " + COL_ID + "= ?";
+    private static final String GET_MONSTER_BY_ID = "SELECT * FROM " + TABLE_NAME + " WHERE " + COL_ID + "= ?";
+    private static final String UPDATE_MONSTER_VOTES = "UPDATE " + TABLE_NAME + " SET " + COL_STARS + " = " + COL_STARS + " + ? " + ", " + COL_VOTES + " = " + COL_VOTES + " + 1" + " WHERE " + COL_ID + "= ?";
 
+    public static synchronized MonsterDatabaseHelper getInstance(Context ctx) {
+        if (mInstance == null) {
+            mInstance = new MonsterDatabaseHelper(ctx.getApplicationContext());
+        }
+        return mInstance;
+    }
 
     /**
      * create the database every time this constructor gets called.
@@ -52,6 +73,7 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
      */
     public MonsterDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     //this method gets executed every time getWritableDatabase or getReadableDatabase is called.
@@ -61,9 +83,19 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL(DROP_TABLE_ST);
-        onCreate(sqLiteDatabase);
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        Log.e(TAG, "Updating table from " + oldVersion + " to " + newVersion);
+        // You will not need to modify this unless you need to do some android specific things.
+        // When upgrading the database, all you need to do is add a file to the assets folder and name it:
+        // from_1_to_2.sql with the version that you are upgrading to as the last version.
+
+        for (int i = oldVersion; i < newVersion; ++i) {
+            String migrationName = String.format("from_%d_to_%d.sql", i, (i + 1));
+            migrationName = "databaseFiles/scripts/" + migrationName;
+            Log.d(TAG, "Looking for migration file: " +  migrationName);
+            readAndExecuteSQLScript(sqLiteDatabase, context, migrationName);
+        }
+
     }
 
     /**
@@ -95,7 +127,6 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     *
      * @return  A cursor of all monsters in the table called monster.
      */
     public Cursor getAll() {
@@ -164,8 +195,10 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
                 String description = cursor.getString(2);
                 Integer scariness = cursor.getInt(3);
                 String imageFileName = cursor.getString(4);
+                Integer votes = cursor.getInt(5);
+                Integer stars = cursor.getInt(6);
 
-                monster = new Monster(id, name, description, scariness, imageFileName);
+                monster = new Monster(id, name, description, scariness, imageFileName, votes, stars);
                 monsters.add(monster);
             }
         }
@@ -214,12 +247,91 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
                 String description = cursor.getString(2);
                 Integer scariness = cursor.getInt(3);
                 String imageFileName = cursor.getString(4);
+                Integer votes = cursor.getInt(5);
+                Integer stars = cursor.getInt(6);
 
-                monster = new Monster(id, name, description, scariness, imageFileName);
+                monster = new Monster(id, name, description, scariness, imageFileName, votes, stars);
 
             }
         cursor.close();
         return monster;
 
+    }
+
+
+    public boolean rateMonster(Long id, Integer stars){
+        SQLiteDatabase db = this.getWritableDatabase();
+        /*
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_ID, id);
+        contentValues.put(COL_VOTES, COL_VOTES + "+1");
+        contentValues.put(COL_STARS, COL_STARS + "+" + stars.toString());
+
+        int numRowsUpdated = db.update(TABLE_NAME, contentValues, "ID = ?", new String[]{id.toString()});
+        return numRowsUpdated > 0;
+        */
+
+        db.execSQL(UPDATE_MONSTER_VOTES, new String[]{ stars.toString(), id.toString()});
+
+        return true;
+    }
+
+    /**
+     * reads and execute an upgrade sql file stored in assets
+     * @param db        database reference
+     * @param ctx       current context
+     * @param fileName  file to execute. It MUST have the following format: file_X_to_Y.sql
+     *                  where X is the old version of the database
+     *                        Y is the new version of the database
+     */
+    private void readAndExecuteSQLScript(SQLiteDatabase db, Context ctx, String fileName) {
+        if (TextUtils.isEmpty(fileName)) {
+            Log.d(TAG, "SQL script file name " + fileName + " is empty");
+            return;
+        }
+
+        Log.d(TAG, "Script " + fileName + " found. Executing...");
+        AssetManager assetManager = ctx.getAssets();
+        BufferedReader reader = null;
+        InputStream is = null;
+        InputStreamReader isr = null;
+        try {
+            is = assetManager.open(fileName);
+            isr = new InputStreamReader(is);
+            reader = new BufferedReader(isr);
+            executeSQLScript(db, reader);
+        } catch (IOException e) {
+            Log.e(TAG, "IOException:", e);
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                    isr.close();
+                    is.close();
+                } catch (IOException e) {
+                    Log.e(TAG, "IOException:", e);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Executes every line inside of a file
+     * @param db        database reference
+     * @param reader    reader used to read lines
+     * @throws IOException
+     */
+    private void executeSQLScript(SQLiteDatabase db, BufferedReader reader) throws IOException {
+        String line;
+        StringBuilder statement = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            statement.append(line);
+            statement.append("\n");
+            if (line.endsWith(";")) {
+                db.execSQL(statement.toString());
+                statement = new StringBuilder();
+            }
+        }
     }
 }

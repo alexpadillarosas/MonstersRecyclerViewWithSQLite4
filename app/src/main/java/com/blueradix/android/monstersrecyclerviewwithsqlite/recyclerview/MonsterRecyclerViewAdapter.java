@@ -17,15 +17,18 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
 
     private List<Monster> monsters;
     private Context context;
+    private OnMonsterListener onMonsterListener;
+
 
     /**
      * Constructor receiving the datasource of the recyclerView monsters list, and the context of the caller.
      * @param monsters      List of monsters to display in the recyclerView
      * @param context
      */
-    public MonsterRecyclerViewAdapter(List<Monster> monsters, Context context) {
+    public MonsterRecyclerViewAdapter(List<Monster> monsters, Context context, OnMonsterListener onMonsterListener) {
         this.monsters = monsters;
         this.context = context;
+        this.onMonsterListener = onMonsterListener;
     }
 
     /**
@@ -47,7 +50,7 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
         View monsterView = inflater.inflate(R.layout.recycler_item_view, parent, false);
 
         //Return a new holder instance.
-        MonsterViewHolder monsterViewHolder = new MonsterViewHolder(monsterView);
+        MonsterViewHolder monsterViewHolder = new MonsterViewHolder(monsterView, onMonsterListener);
         return monsterViewHolder;
     }
 
@@ -64,11 +67,10 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
         // call the method to set the values in the MonsterViewHolder
         holder.updateMonster(monster);
 
-
+        holder.bind(monster, onMonsterListener);
     }
 
     /**
-     *
      * @return  returns the total number of the list size. The list values are passed by the constructor
      */
     @Override
@@ -84,5 +86,14 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
         monsters.add(monster);
         //notify the recyclerView a new element was added to its source ( monsters list )
         notifyItemInserted(getItemCount());
+    }
+
+    public void replaceItem(int position, Monster monster) {
+        monsters.set(position, monster);
+        notifyItemChanged(position);
+    }
+
+    public List<Monster> getMonsters() {
+        return monsters;
     }
 }

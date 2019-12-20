@@ -29,7 +29,6 @@ public class AddMonsterScrollingActivity extends AppCompatActivity {
     Button cancelMonsterButton;
     Button addMonsterButton;
 
-
     Monster monster;
     Integer scarinessValue = 0;
 
@@ -48,7 +47,6 @@ public class AddMonsterScrollingActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
 
 
         monsterNameEditText = findViewById(R.id.monsterNameEditTextAddMonster);

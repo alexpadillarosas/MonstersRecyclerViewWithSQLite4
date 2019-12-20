@@ -4,9 +4,14 @@
     <string name="action_settings">Configuracion</string>
     <string name="title_activity_add_monster_scrolling">Nuevo Monstruo</string>
     <string name="title_activity_monster_detail_scrolling">Ver Monstruo</string>
-    <string name="type_your_monster_s_name_add_monster_scrolling_activity">ingresa el nombre del monstruo</string>
-    <string name="add_a_short_description_add_monster_scrolling_activity">añade una breve descripcion</string>
-    <string name="scariness_label_add_monster_scrolling_activity">cuanto espanta</string>
+    <string name="monster_name_is_required">Tu monstruo necesita nombre</string>
+    <string name="create_monster_failed_message">No pudimos crear tu monstruo, intenta otra vez</string>
+    <string name="create_monster_succeeded_message">Monstruo creado</string>
+    <string name="monster_image_content_description">imagen autogenerada del monstruo</string>
+    <string name="type_your_monster_s_name_add_monster_scrolling_activity">Ingresa el nombre del monstruo</string>
+    <string name="add_a_short_description_add_monster_scrolling_activity">añade una breve description</string>
+    <string name="scariness_label_add_monster_scrolling_activity">Cuanto espanta</string>
     <string name="add_button_label_add_monster_scrolling_activity">crear</string>
     <string name="cancel_button_label_add_monster_activity">cancelar</string>
+    <string name="overall_rating">Total rating</string>
 </resources>
