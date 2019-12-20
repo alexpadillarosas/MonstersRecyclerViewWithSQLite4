@@ -97,3 +97,6 @@ public class MonsterRecyclerViewAdapter extends RecyclerView.Adapter<MonsterView
         return monsters;
     }
 }
+
+//Updating data in Android RecyclerView
+//https://medium.com/@suragch/updating-data-in-an-android-recyclerview-842e56adbfd8
