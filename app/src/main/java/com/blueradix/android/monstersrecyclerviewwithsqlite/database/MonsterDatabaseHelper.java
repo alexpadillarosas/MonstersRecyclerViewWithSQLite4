@@ -90,10 +90,10 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
         // from_1_to_2.sql with the version that you are upgrading to as the last version.
 
         for (int i = oldVersion; i < newVersion; ++i) {
-            String migrationName = String.format("from_%d_to_%d.sql", i, (i + 1));
-            migrationName = "databaseFiles/scripts/" + migrationName;
-            Log.d(TAG, "Looking for migration file: " +  migrationName);
-            readAndExecuteSQLScript(sqLiteDatabase, context, migrationName);
+            String migrationFileName = String.format("from_%d_to_%d.sql", i, (i + 1));
+            migrationFileName = "databaseFiles/scripts/" + migrationFileName;
+            Log.d(TAG, "Looking for migration file: " +  migrationFileName);
+            readAndExecuteSQLScript(sqLiteDatabase, context, migrationFileName);
         }
 
     }

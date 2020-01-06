@@ -61,7 +61,7 @@ public class MonsterDetailScrollingActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setData();
+                setIntentWithData();
             }
         });
 
@@ -85,11 +85,11 @@ public class MonsterDetailScrollingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        setData();
+        setIntentWithData();
         super.onBackPressed();
     }
 
-    private void setData(){
+    private void setIntentWithData(){
 
         Intent goingBack = new Intent();
         goingBack.putExtra(Monster.MONSTER_KEY, monster);

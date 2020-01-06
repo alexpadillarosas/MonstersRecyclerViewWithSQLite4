@@ -31,7 +31,7 @@ public class MonsterViewHolder extends RecyclerView.ViewHolder {
     public final TextView monsterDescription;
     public final RatingBar ratingBar;
 
-    OnMonsterListener onMonsterListener;
+    private OnMonsterListener onMonsterListener;
 
     public MonsterViewHolder(@NonNull View itemView, OnMonsterListener onMonsterListener) {
         super(itemView);
