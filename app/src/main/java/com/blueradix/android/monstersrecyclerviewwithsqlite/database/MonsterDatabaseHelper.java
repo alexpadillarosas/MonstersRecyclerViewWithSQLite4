@@ -45,12 +45,22 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
     private static final String COL_VOTES = "VOTES";
     private static final String COL_STARS = "STARS";
 
-    //create sql statements
+    //create sql statements initial version
     private static final String CREATE_TABLE_ST = "CREATE TABLE " + TABLE_NAME + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COL_NAME + " TEXT, " +
             COL_DESCRIPTION + " TEXT, " +
             COL_SCARINESS + " INTEGER, " +
             COL_IMAGE + " TEXT)";
+
+    // Keep this SQL statement updated with the latest version of the table
+    private static final String CREATE_TABLE_ST_UP_TO_DATE = "CREATE TABLE " + TABLE_NAME + "(" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COL_NAME + " TEXT, " +
+            COL_DESCRIPTION + " TEXT, " +
+            COL_SCARINESS + " INTEGER, " +
+            COL_IMAGE + " TEXT, " +
+            COL_VOTES + " INTEGER DEFAULT 0, " +
+            COL_STARS + " INTEGER DEFAULT 0 )";
+
 
     private static final String DROP_TABLE_ST = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static final String GET_ALL_ST = "SELECT * FROM " + TABLE_NAME;
@@ -67,7 +77,10 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * create the database every time this constructor gets called.
+     * Set the new version of the database (newVersion specified in the constant DATABASE_VERSION),
+     * if the database new version is greater than the
+     * database version stored inside of the database( oldVersion, written there when the db was created ) then
+     * the onUpgrade method will be called.
      *
      * @param context provides access to the Activity resources
      */
@@ -76,10 +89,12 @@ public class MonsterDatabaseHelper extends SQLiteOpenHelper {
         this.context = context;
     }
 
-    //this method gets executed every time getWritableDatabase or getReadableDatabase is called.
+    /**
+     * this method gets executed only if the database does not exists
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(CREATE_TABLE_ST);
+            sqLiteDatabase.execSQL(CREATE_TABLE_ST_UP_TO_DATE);
     }
 
     @Override
